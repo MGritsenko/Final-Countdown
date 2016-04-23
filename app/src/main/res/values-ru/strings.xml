@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Final Countdown</string>
     <string name="set_time">Время:</string>
-    <string name="set_date">Дата:</string>
+    <string name="set_date">Дата :</string>
     <string name="previous_dates">Прошлые даты:</string>
     <string name="set_new_countdown">УСТАНОВИТЬ НОВУЮ ДАТУ</string>
     <string name="send_email">Em@il me</string>
