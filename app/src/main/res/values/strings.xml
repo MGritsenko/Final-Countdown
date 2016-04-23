@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Final Countdown</string>
+    <string name="set_time">Set time:</string>
+    <string name="set_date">Set date:</string>
+    <string name="previous_dates">Previous dates:</string>
+    <string name="set_new_countdown">SET NEW COUNTDOWN</string>
+    <string name="send_email">Em@il me</string>
+    <string name="to_date">To date:</string>
+    <string name="to_go">To go:</string>
+    <string name="separator">:</string>
+    <string name="formating">d:%1$d/h:%2$d/m:%3$d/s:%4$d</string>
+    <string name="error">Please fill out this field!</string>
+    <string name="dd_mm_yy">dd/MMMM/yyyy hh:mm:ss</string>
+    <string name="subject">Time remaining</string>
+</resources>

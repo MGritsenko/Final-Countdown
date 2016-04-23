@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Final Countdown</string>
+    <string name="set_time">Время:</string>
+    <string name="set_date">Дата:</string>
+    <string name="previous_dates">Прошлые даты:</string>
+    <string name="set_new_countdown">УСТАНОВИТЬ НОВУЮ ДАТУ</string>
+    <string name="send_email">Em@il me</string>
+    <string name="to_date">До даты:</string>
+    <string name="to_go">Осталось:</string>
+    <string name="separator">:</string>
+    <string name="formating">д:%1$d/ч:%2$d/м:%3$d/с:%4$d</string>
+    <string name="error">Заполните это поле!</string>
+    <string name="dd_mm_yy">dd/MMMM/yyyy hh:mm:ss</string>
+    <string name="subject">Времени осталось</string>
+</resources>
