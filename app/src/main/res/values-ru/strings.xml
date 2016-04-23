@@ -8,7 +8,11 @@
     <string name="send_email">Em@il me</string>
     <string name="to_date">До даты:</string>
     <string name="to_go">Осталось:</string>
-    <string name="separator">:</string>
+    <string name="h">ч</string>
+    <string name="m">м</string>
+    <string name="s">с</string>
+    <string name="d">д</string>
+    <string name="y">г</string>
     <string name="formating">д:%1$d/ч:%2$d/м:%3$d/с:%4$d</string>
     <string name="error">Заполните это поле!</string>
     <string name="dd_mm_yy">dd/MMMM/yyyy hh:mm:ss</string>
