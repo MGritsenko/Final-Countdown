@@ -412,8 +412,13 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
+        if(Long.parseLong(strMonths) < 1){
+            monthsEdit.setError(getString(R.string.error_mnth_min));
+            return false;
+        }
+
         if(Long.parseLong(strMonths) > 12){
-            monthsEdit.setError(getString(R.string.error_mnth));
+            monthsEdit.setError(getString(R.string.error_mnth_max));
             return false;
         }
 

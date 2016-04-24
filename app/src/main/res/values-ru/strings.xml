@@ -22,7 +22,8 @@
     <string name="error_m">Не может быть больше чем 59!</string>
     <string name="error_s">Не может быть больше чем 59!</string>
     <string name="error_d">Не может быть больше чем 31!</string>
-    <string name="error_mnth">Не может быть больше чем 12!</string>
+    <string name="error_mnth_max">Не может быть больше чем 12!</string>
+    <string name="error_mnth_min">Не может быть меньше чем 1!</string>
     <string name="error_ymax">Не может быть больше чем 3030!</string>
     <string name="error_ymin">Не может быть больше чем 1970!</string>
 </resources>
