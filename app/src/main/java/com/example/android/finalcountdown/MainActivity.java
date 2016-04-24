@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            DisplayNewDate(); //this one calls only the first time app is launched
+            DisplayNewDate(); //this one calls only for the first time app is launched
 
         }
         catch (IOException e) {
@@ -402,13 +402,33 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
+        if(Long.parseLong(strDays) > 31){
+            daysEdit.setError(getString(R.string.error_d));
+            return false;
+        }
+
         if(TextUtils.isEmpty(strMonths)) {
             monthsEdit.setError(getString(R.string.error));
             return false;
         }
 
+        if(Long.parseLong(strMonths) > 12){
+            monthsEdit.setError(getString(R.string.error_mnth));
+            return false;
+        }
+
         if(TextUtils.isEmpty(strYears)) {
             yearsEdit.setError(getString(R.string.error));
+            return false;
+        }
+
+        if(Long.parseLong(strYears) > 3030){
+            yearsEdit.setError(getString(R.string.error_ymax));
+            return false;
+        }
+
+        if(Long.parseLong(strYears) < 1970){
+            yearsEdit.setError(getString(R.string.error_ymin));
             return false;
         }
 
@@ -432,13 +452,28 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
+        if(Long.parseLong(strHours) > 24){
+            hoursEdit.setError(getString(R.string.error_h));
+            return false;
+        }
+
         if(TextUtils.isEmpty(strMinutes)) {
             minutesEdit.setError(getString(R.string.error));
             return false;
         }
 
+        if(Long.parseLong(strMinutes) > 59){
+            minutesEdit.setError(getString(R.string.error_m));
+            return false;
+        }
+
         if(TextUtils.isEmpty(strSeconds)) {
             secondsEdit.setError(getString(R.string.error));
+            return false;
+        }
+
+        if(Long.parseLong(strSeconds) > 59){
+            secondsEdit.setError(getString(R.string.error_s));
             return false;
         }
 

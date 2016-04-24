@@ -16,4 +16,12 @@
     <string name="error">Please fill out this field!</string>
     <string name="dd_mm_yy">dd/MMMM/yyyy hh:mm:ss</string>
     <string name="subject">Time remaining</string>
+
+    <string name="error_h">Can not be bigger than 23!</string>
+    <string name="error_m">Can not be bigger than 59!</string>
+    <string name="error_s">Can not be bigger than 59!</string>
+    <string name="error_d">Can not be bigger than 31!</string>
+    <string name="error_mnth">Can not be bigger than 12!</string>
+    <string name="error_ymax">Can not be bigger than 3030!</string>
+    <string name="error_ymin">Can not be less than 1970!</string>
 </resources>

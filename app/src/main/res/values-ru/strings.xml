@@ -17,4 +17,12 @@
     <string name="error">Заполните это поле!</string>
     <string name="dd_mm_yy">dd/MMMM/yyyy hh:mm:ss</string>
     <string name="subject">Времени осталось</string>
+
+    <string name="error_h">Не может быть больше чем 23!</string>
+    <string name="error_m">Не может быть больше чем 59!</string>
+    <string name="error_s">Не может быть больше чем 59!</string>
+    <string name="error_d">Не может быть больше чем 31!</string>
+    <string name="error_mnth">Не может быть больше чем 12!</string>
+    <string name="error_ymax">Не может быть больше чем 3030!</string>
+    <string name="error_ymin">Не может быть больше чем 1970!</string>
 </resources>
