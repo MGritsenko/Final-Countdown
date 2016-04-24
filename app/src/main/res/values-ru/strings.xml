@@ -25,5 +25,5 @@
     <string name="error_mnth_max">Не может быть больше чем 12!</string>
     <string name="error_mnth_min">Не может быть меньше чем 1!</string>
     <string name="error_ymax">Не может быть больше чем 3030!</string>
-    <string name="error_ymin">Не может быть больше чем 1970!</string>
+    <string name="error_ymin">Не может быть меньше чем 1970!</string>
 </resources>
