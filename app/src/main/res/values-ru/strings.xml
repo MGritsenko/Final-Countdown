@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Final Countdown</string>
     <string name="set_time">Время:</string>
-    <string name="set_date">Дата :</string>
+    <string name="set_date">Дата:</string>
     <string name="previous_dates">Прошлые даты:</string>
     <string name="set_new_countdown">УСТАНОВИТЬ НОВУЮ ДАТУ</string>
     <string name="send_email">Em@il me</string>
@@ -13,17 +13,21 @@
     <string name="s">с</string>
     <string name="d">д</string>
     <string name="y">г</string>
-    <string name="formating">д:%1$d/ч:%2$d/м:%3$d/с:%4$d</string>
-    <string name="error">Заполните это поле!</string>
-    <string name="dd_mm_yy">dd/MMMM/yyyy hh:mm:ss</string>
+    <string name="formatting">Г %1$d. М %2$d. Д %3$d / ч %4$d: м %5$d: с %6$d</string>
+    <string name="error">Заполните пустое поле</string>
+    <string name="dd_mm_yy">dd.MMM.yyyy / HH:mm:ss</string>
     <string name="subject">Времени осталось</string>
 
-    <string name="error_h">Не может быть больше чем 23!</string>
-    <string name="error_m">Не может быть больше чем 59!</string>
-    <string name="error_s">Не может быть больше чем 59!</string>
-    <string name="error_d">Не может быть больше чем 31!</string>
-    <string name="error_mnth_max">Не может быть больше чем 12!</string>
-    <string name="error_mnth_min">Не может быть меньше чем 1!</string>
-    <string name="error_ymax">Не может быть больше чем 3030!</string>
-    <string name="error_ymin">Не может быть меньше чем 1970!</string>
+    <string name="incorrect_date">Неправильная дата</string>
+    <string name="inserted">Сохранено</string>
+    <string name="not_inserted">Не сохранено</string>
+    <string name="error_h_max">Не может быть больше чем 23</string>
+    <string name="error_m">Не может быть больше чем 59</string>
+    <string name="error_s">Не может быть больше чем 59</string>
+    <string name="error_d_max">Не может быть больше чем 31</string>
+    <string name="error_d_min">Не может быть меньше чем 1</string>
+    <string name="error_mnth_max">Не может быть больше чем 12</string>
+    <string name="error_mnth_min">Не может быть меньше чем 1</string>
+    <string name="error_ymax">Не может быть больше чем 6000</string>
+    <string name="error_ymin">Не может быть меньше чем 1</string>
 </resources>

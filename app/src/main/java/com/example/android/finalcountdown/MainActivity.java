@@ -1,45 +1,48 @@
 package com.example.android.finalcountdown;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import android.widget.Toast;
+
+//import com.squareup.leakcanary.LeakCanary;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    //MainActivity
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//MainActivity
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity
+{
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Variables
     ////////////////////////////////////////////////////////////////////////////////////////////////
-
     ScrollView scrollView;
 
     Button setNewCountDownBtn;
+    Button amPm;
 
-    TextView scrollableTextView;
+    ListView scrollableTextView;
     TextView resultTime;
     TextView resultDate;
 
@@ -54,30 +57,35 @@ public class MainActivity extends AppCompatActivity {
     EditText monthsEdit;
     EditText yearsEdit;
 
-    Calendar timeRemaining;
-    Calendar targetDate;
+    CustomDate targetDate = new CustomDate();
+    CustomDate timeRemaining = new CustomDate();
+    Date date = new Date();
+    CustomDate tmp = new CustomDate();
+    List<String> list = new ArrayList<>();
+    ListAdapter listAdapter = new ListAdapter();
 
-    long millis = 0;
-
-    boolean runHandler = true;
     Handler myHandler = new Handler();
+    Runnable updateTask;
 
-    String day = "24";
+    String day = "18";
     String month = "4";
     String year = "2016";
 
-    String hours = "23";
-    String minutes = "59";
-    String seconds = "59";
+    String hours = "19";
+    String minutes = "0";
+    String seconds = "0";
 
-    String fileName = "data_time";
+    DataBaseHelperClass myDb;
+
+    boolean ampm = false;
+    boolean english = true;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //This method saves a state of the app before a screen orientation changed.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState)
+    {
         super.onSaveInstanceState(outState);
 
         outState.putBoolean("hours", hoursEdit.isEnabled());
@@ -89,22 +97,53 @@ public class MainActivity extends AppCompatActivity {
         outState.putBoolean("years", yearsEdit.isEnabled());
 
         outState.putBoolean("button", setNewCountDownBtn.isEnabled());
+        outState.putBoolean("buttonAmPm", ampm);
+        outState.putBoolean("amPmButtonIsActivated", amPm.isEnabled());
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //On destroy method
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+
+        myHandler.removeCallbacks(updateTask);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //LeakCanary
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+//    public static RefWatcher getRefWatcher(Context context)
+//    {
+//        MainActivity application = (MainActivity) context.getApplicationContext();
+//        return application.refWatcher;
+//    }
+
+    //private RefWatcher refWatcher;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Main method that runs after the app was launched.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
+        //refWatcher = LeakCanary.install(this.getApplication());
+        //LeakCanary.install(this.getApplication());
+
+        myDb = new DataBaseHelperClass(this);
+
         setNewCountDownBtn = (Button) findViewById(R.id.setNewCountDownButton);
+        amPm = (Button) findViewById(R.id.ampm);
 
         scrollView = (ScrollView) findViewById(R.id.scrollView);
 
-        scrollableTextView = (TextView) findViewById(R.id.scrollableTextView);
+        scrollableTextView = (ListView) findViewById(R.id.scrollableTextView);
         resultTime = (TextView) findViewById(R.id.resultTime);
         resultDate = (TextView) findViewById(R.id.resultDate);
 
@@ -127,11 +166,11 @@ public class MainActivity extends AppCompatActivity {
         //prevents to scroll all the main view. After that emits scrollableTextView.setOnTouchListener
         //and takes scrolling handling on his own.
         ////////////////////////////////////////////////////////////////////////////////////////////
-
-        scrollView.setOnTouchListener(new View.OnTouchListener() {
-
+        scrollView.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View view, MotionEvent event) {
+            public boolean onTouch(View view, MotionEvent event)
+            {
                view.findViewById(R.id.scrollableTextView).getParent()
                         .requestDisallowInterceptTouchEvent(false);
 
@@ -139,29 +178,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        scrollableTextView.setOnTouchListener(new View.OnTouchListener() {
-
+        scrollableTextView.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View view, MotionEvent arg1) {
+            public boolean onTouch(View view, MotionEvent arg1)
+            {
                 view.getParent().requestDisallowInterceptTouchEvent(true);
                 return false;
             }
         });
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        //Sets the movement method that interprets movement keys by scrolling the text buffer.
+        //Loads up previously saved info about the data was entered.
         ////////////////////////////////////////////////////////////////////////////////////////////
-        scrollableTextView.setMovementMethod(new ScrollingMovementMethod());
+        String locale = Locale.getDefault().getDisplayLanguage();   //getResources().getConfiguration().locale.toString();
 
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        //Sets new target date.
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        DisplayNewDate();
+        if(!locale.equals("English")) //en_US
+        {
+            english = false; //not a russian locale
+
+            View b = amPm;
+            b.setVisibility(View.GONE);
+        }
+        else
+            english = true;
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         //Loads up previously saved info about the data was entered.
         ////////////////////////////////////////////////////////////////////////////////////////////
         ReadMessage();
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        //Sets new target date.
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        DisplayNewDate();
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         //Sets time field enabled.
@@ -181,7 +231,8 @@ public class MainActivity extends AppCompatActivity {
         ////////////////////////////////////////////////////////////////////////////////////////////
         //Restores saved settings if savedInstanceState != null.
         ////////////////////////////////////////////////////////////////////////////////////////////
-        if(savedInstanceState != null){
+        if(savedInstanceState != null)
+        {
             hoursEdit.setEnabled(savedInstanceState.getBoolean("hours"));
             minutesEdit.setEnabled(savedInstanceState.getBoolean("minutes"));
             secondsEdit.setEnabled(savedInstanceState.getBoolean("seconds"));
@@ -191,6 +242,10 @@ public class MainActivity extends AppCompatActivity {
             yearsEdit.setEnabled(savedInstanceState.getBoolean("years"));
 
             setNewCountDownBtn.setEnabled(savedInstanceState.getBoolean("button"));
+
+            ampm = savedInstanceState.getBoolean("buttonAmPm");
+            amPm.setEnabled(savedInstanceState.getBoolean("amPmButtonIsActivated"));
+            amPm();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -202,159 +257,156 @@ public class MainActivity extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Sets new target date on to the screen.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private void DisplayNewDate(){
+    private void DisplayNewDate()
+    {
+        targetDate.setDate(Integer.parseInt(hours), Integer.parseInt(minutes), Integer.parseInt(seconds),
+                Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
 
         DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dd_mm_yy), Locale.getDefault());
-        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
 
-        targetDate = Calendar.getInstance();
-        targetDate.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day),
-                Integer.parseInt(hours), Integer.parseInt(minutes), Integer.parseInt(seconds));
+        cal.set(targetDate.getYear(), targetDate.getMonth() , targetDate.getDay(), targetDate.getHours(), targetDate.getMinutes(), targetDate.getSeconds());
 
-        date.setTime(targetDate.getTimeInMillis());
+        date.setTime(cal.getTimeInMillis());
+
         resultTime.setText(dateFormat.format(date));
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Saves the date was entered.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void WriteMessage(){
-        String message = Long.toString(targetDate.getTimeInMillis()) + "\n";
+    public void WriteMessage()
+    {
+        if(!targetDate.setDate(Integer.parseInt(hours), Integer.parseInt(minutes), Integer.parseInt(seconds),
+                Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year)))
+        {
+            DisplayError(R.string.incorrect_date);
 
-        try {
-            FileOutputStream fileOutputStream = openFileOutput(fileName, MODE_APPEND);
-
-            fileOutputStream.write(message.getBytes());
-            fileOutputStream.close();
-
+            return;
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        boolean isInserted =  myDb.InsertData(targetDate);
+
+        if(isInserted)
+            DisplayError(R.string.inserted);
+        else
+            DisplayError(R.string.not_inserted);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Loads up previously saved info about the data was entered.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void ReadMessage(){
-        try {
-            FileInputStream fileInputStream = openFileInput(fileName);
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+    public void ReadMessage()
+    {
+        Cursor res = myDb.GetAllData();
 
-            String message;
-            String buf = "";
-            String tmp = null;
+        if(res.getCount() == 0)
+        {
+            return;//show mess
+        }
+
+        list.clear();
+
+        while (res.moveToNext())
+        {
+            tmp.setDate(res.getInt(1), res.getInt(2), res.getInt(3), res.getInt(4), res.getInt(5), res.getInt(6));
 
             DateFormat dateFormat = new SimpleDateFormat(getString(R.string.dd_mm_yy), Locale.getDefault());
-            Date date = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.set(tmp.getYear(), tmp.getMonth() , tmp.getDay(), tmp.getHours(), tmp.getMinutes(), tmp.getSeconds());
+            date.setTime(cal.getTimeInMillis());
+            resultTime.setText(dateFormat.format(date));
 
-            while((message = bufferedReader.readLine()) != null){
-                tmp = message;
-
-                long time = Long.parseLong(message.replaceAll("[\\D]",""));
-
-                date.setTime(time);
-                buf += dateFormat.format(date) + "\n";
-            }
-
-            if(tmp != null) {
-                long time;
-                time = Long.parseLong(tmp.replaceAll("[\\D]",""));
-
-                date.setTime(time);
-                resultTime.setText(dateFormat.format(date));
-
-                targetDate = Calendar.getInstance();
-                targetDate.setTime(date);
-
-                scrollableTextView.setText(buf);
-
-                return;
-            }
-
-            DisplayNewDate(); //this one calls only for the first time app is launched
-
+            list.add(dateFormat.format(date));
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        hours = Integer.toString(tmp.getHours());
+        minutes = Integer.toString(tmp.getMinutes());
+        seconds = Integer.toString(tmp.getSeconds());
+        day = Integer.toString(tmp.getDay());
+        month = Integer.toString(tmp.getMonth());
+        year = Integer.toString(tmp.getYear());
+
+        listAdapter.setListAdapter(this, list);
+        scrollableTextView.setAdapter(listAdapter);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Main method that calculates the time to go.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private void GetDateTime() {
+    private void GetDateTime()
+    {
+        timeRemaining.setDate(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE),
+                              Calendar.getInstance().get(Calendar.SECOND), Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
+                              Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.YEAR));
 
-        Date date = new Date();
+        int res = CustomDate.whichIsBigger(timeRemaining, targetDate);
+        String str;
 
-        timeRemaining = Calendar.getInstance();
-        date.setTime(timeRemaining.getTimeInMillis());
+        if(res == -1)
+            str = CustomDate.calculateElapsedTime(this.getApplicationContext(), timeRemaining, targetDate);
+        else if(res == 1)
+            str = CustomDate.calculateElapsedTime(this.getApplicationContext(), targetDate, timeRemaining);
+        else
+            str = CustomDate.calculateElapsedTime(this.getApplicationContext(), timeRemaining, targetDate);
 
-        millis = Math.abs(timeRemaining.getTimeInMillis() - targetDate.getTimeInMillis());
-
-        int scnds = (int) (millis / 1000) % 60 ;
-        int mnts = (int) ((millis / (1000 * 60)) % 60);
-        int hrs = (int) ((millis / (1000 * 60 * 60)) % 24);
-        int dys = (int) ((millis / (1000 * 60 * 60 * 24)));
-
-        resultDate.setText(getString(R.string.formating, dys, hrs, mnts, scnds));
+        resultDate.setText(str);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Main loop that updates every second and shows remaining time.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void UpdateCountDown(){
-
-        new Thread(new Runnable(){  //making a new thread
-
+    public void UpdateCountDown()
+    {
+        updateTask = new Runnable()
+        {
             @Override
-            public void run(){
-                while (runHandler){
-                    try{
-                        Thread.sleep(500);
-                        myHandler.post(new Runnable(){  //myHandler manages tasks in UI thread
-
-                            @Override
-                            public void run(){
-                                GetDateTime();
-                            }
-                        });
-                    }
-                    catch (Exception exception){
-                        exception.printStackTrace();
-                    }
-                }
+            public void run()
+            {
+                GetDateTime();
+                myHandler.postDelayed(this,1000);
             }
-        }).start();
+        };
+
+        myHandler.postDelayed(updateTask,1000);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Sets time field enabled.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private void SetTimeEnabled(){
-        if(timeBox.isChecked()){
+    private void SetTimeEnabled()
+    {
+        if(timeBox.isChecked())
+        {
             hoursEdit.setEnabled(true);
             minutesEdit.setEnabled(true);
             secondsEdit.setEnabled(true);
+
+            amPm.setEnabled(true);
         }
-        else{
+        else
+        {
             hoursEdit.setEnabled(false);
             minutesEdit.setEnabled(false);
             secondsEdit.setEnabled(false);
+
+            amPm.setEnabled(false);
         }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Sets date field enabled.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private void SetDateEnabled(){
-        if(dateBox.isChecked()){
+    private void SetDateEnabled()
+    {
+        if(dateBox.isChecked())
+        {
             daysEdit.setEnabled(true);
             monthsEdit.setEnabled(true);
             yearsEdit.setEnabled(true);
         }
-        else{
+        else
+        {
             daysEdit.setEnabled(false);
             monthsEdit.setEnabled(false);
             yearsEdit.setEnabled(false);
@@ -364,19 +416,19 @@ public class MainActivity extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Sets the "SET NEW COUNTDOWN" button enabled.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private void SetButtonEnabled(){
-        if(!timeBox.isChecked() && !dateBox.isChecked()){
+    private void SetButtonEnabled()
+    {
+        if(!timeBox.isChecked() && !dateBox.isChecked())
             setNewCountDownBtn.setEnabled(false);
-        }
-        else{
+        else
             setNewCountDownBtn.setEnabled(true);
-        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Sets checkbox Time enabled
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void SetTimeEnabled(View view){
+    public void SetTimeEnabled(View view)
+    {
         SetTimeEnabled();
         SetButtonEnabled();
     }
@@ -384,7 +436,8 @@ public class MainActivity extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Sets checkbox Date enabled
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void SetDateEnabled(View view){
+    public void SetDateEnabled(View view)
+    {
         SetDateEnabled();
         SetButtonEnabled();
     }
@@ -392,53 +445,80 @@ public class MainActivity extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Gets a data from "Set date" fields
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private boolean SetNewDate(){
+    private boolean SetNewDate()
+    {
         String strDays = daysEdit.getText().toString();
         String strMonths = monthsEdit.getText().toString();
         String strYears = yearsEdit.getText().toString();
 
-        if(TextUtils.isEmpty(strDays)) {
-            daysEdit.setError(getString(R.string.error));
+        if(TextUtils.isEmpty(strDays))
+        {
+            DisplayError(R.string.error);
+
             return false;
         }
 
-        if(Long.parseLong(strDays) > 31){
-            daysEdit.setError(getString(R.string.error_d));
+        if(Long.parseLong(strDays) < 1)
+        {
+            DisplayError(R.string.error_d_min);
+
             return false;
         }
 
-        if(TextUtils.isEmpty(strMonths)) {
-            monthsEdit.setError(getString(R.string.error));
+        if(Long.parseLong(strDays) > 31)
+        {
+            DisplayError(R.string.error_d_max);
+
             return false;
         }
 
-        if(Long.parseLong(strMonths) < 1){
-            monthsEdit.setError(getString(R.string.error_mnth_min));
+        if(TextUtils.isEmpty(strMonths))
+        {
+            DisplayError(R.string.error);
+
             return false;
         }
 
-        if(Long.parseLong(strMonths) > 12){
-            monthsEdit.setError(getString(R.string.error_mnth_max));
+        if(Long.parseLong(strMonths) < 1)
+        {
+            DisplayError(R.string.error_mnth_min);
+
             return false;
         }
 
-        if(TextUtils.isEmpty(strYears)) {
-            yearsEdit.setError(getString(R.string.error));
+        if(Long.parseLong(strMonths) > 12)
+        {
+            DisplayError(R.string.error_mnth_max);
+
             return false;
         }
 
-        if(Long.parseLong(strYears) > 3030){
-            yearsEdit.setError(getString(R.string.error_ymax));
+        if(TextUtils.isEmpty(strYears))
+        {
+            DisplayError(R.string.error);
+
             return false;
         }
 
-        if(Long.parseLong(strYears) < 1970){
-            yearsEdit.setError(getString(R.string.error_ymin));
+        if(Long.parseLong(strYears) < 1)
+        {
+            DisplayError(R.string.error_ymin);
+
+            return false;
+        }
+
+        if(Long.parseLong(strYears) > 6000)
+        {
+            DisplayError(R.string.error_ymax);
+
             return false;
         }
 
         day = daysEdit.getText().toString();
-        month = monthsEdit.getText().toString();
+
+        int m = Integer.parseInt(monthsEdit.getText().toString()) - 1;
+        month = String.valueOf(m);
+
         year = yearsEdit.getText().toString();
 
         return true;
@@ -447,42 +527,75 @@ public class MainActivity extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Gets a data from "Set time" fields
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private boolean SetNewTime(){
+    private boolean SetNewTime()
+    {
         String strHours = hoursEdit.getText().toString();
         String strMinutes = minutesEdit.getText().toString();
         String strSeconds = secondsEdit.getText().toString();
 
-        if(TextUtils.isEmpty(strHours)) {
-            hoursEdit.setError(getString(R.string.error));
+        if(TextUtils.isEmpty(strHours))
+        {
+            DisplayError(R.string.error);
+
             return false;
         }
 
-        if(Long.parseLong(strHours) > 24){
-            hoursEdit.setError(getString(R.string.error_h));
+        if(Long.parseLong(strHours) > 12 && english)
+        {
+            DisplayError(R.string.error_h_max);
+
             return false;
         }
 
-        if(TextUtils.isEmpty(strMinutes)) {
-            minutesEdit.setError(getString(R.string.error));
+        if(Long.parseLong(strHours) < 1 && english)
+        {
+            DisplayError(R.string.error_h_min);
+
             return false;
         }
 
-        if(Long.parseLong(strMinutes) > 59){
-            minutesEdit.setError(getString(R.string.error_m));
+        if(Long.parseLong(strHours) > 23)
+        {
+            DisplayError(R.string.error_h_max);
+
             return false;
         }
 
-        if(TextUtils.isEmpty(strSeconds)) {
-            secondsEdit.setError(getString(R.string.error));
+        if(TextUtils.isEmpty(strMinutes))
+        {
+            DisplayError(R.string.error);
+
             return false;
         }
 
-        if(Long.parseLong(strSeconds) > 59){
-            secondsEdit.setError(getString(R.string.error_s));
+        if(Long.parseLong(strMinutes) > 59)
+        {
+            DisplayError(R.string.error_m);
+
             return false;
         }
 
-        hours = hoursEdit.getText().toString();
+        if(TextUtils.isEmpty(strSeconds))
+        {
+            DisplayError(R.string.error);
+
+            return false;
+        }
+
+        if(Long.parseLong(strSeconds) > 59)
+        {
+            DisplayError(R.string.error_s);
+
+            return false;
+        }
+
+        if(english && ampm)         //if ampm == PM
+            hours = convertToPm(Integer.parseInt(hoursEdit.getText().toString()));
+        else if(english && !ampm)   //if ampm == AM
+            hours = convertToAm(Integer.parseInt(hoursEdit.getText().toString()));
+        else
+            hours = hoursEdit.getText().toString();
+
         minutes = minutesEdit.getText().toString();
         seconds = secondsEdit.getText().toString();
 
@@ -490,30 +603,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Dislplay an error
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public void DisplayError(int str)
+    {
+        Toast.makeText(this.getApplicationContext(), str, Toast.LENGTH_SHORT).show();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     //On click method "SET NEW COUNTDOWN"
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void SetNewCountDown(View view){
+    public void SetNewCountDown(View view)
+    {
+        InputMethodManager imm = (InputMethodManager)getSystemService(this.getApplicationContext().INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(setNewCountDownBtn.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
-        if(timeBox.isChecked()) {
+        if(timeBox.isChecked())
+        {
             if(!SetNewTime())
                 return;
         }
 
-        if(dateBox.isChecked()) {
+        if(dateBox.isChecked())
+        {
             if(!SetNewDate())
                 return;
         }
 
-        DisplayNewDate();  //shows on the a new date screen
-
         WriteMessage();  //saves the date was entered
+        ReadMessage();
+        DisplayNewDate();  //shows a new date on the screen
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     //On click method "EM@IL ME"
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public void SendEmail(View view){
-
+    public void SendEmail(View view)
+    {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
 
         intent.setData(Uri.parse("mailto:"));
@@ -521,8 +647,109 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject));
         intent.putExtra(Intent.EXTRA_TEXT, resultDate.getText());
 
-        if (intent.resolveActivity(getPackageManager()) != null) {
+        if (intent.resolveActivity(getPackageManager()) != null)
             startActivity(intent);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //On click method amPm, chnges the label of the amPm button from AM to PM
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public void amPm(View view)
+    {
+        if(!ampm)
+        {
+            ampm = true;
+
+            amPm.setText(getString(R.string.pm));
         }
+        else
+        {
+            ampm = false;
+
+            amPm.setText(getString(R.string.am));
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //onSaveInstance helper method to restore amPm button settings
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public void amPm()
+    {
+        if(!ampm)
+            amPm.setText(getString(R.string.am));
+        else
+            amPm.setText(getString(R.string.pm));
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //converts from 24h to 12h format
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public String convertToPm(int hours)
+    {
+        switch (hours)
+        {
+            case 1:
+                return "13";
+            case 2:
+                return "14";
+            case 3:
+                return "15";
+            case 4:
+                return "16";
+            case 5:
+                return "17";
+            case 6:
+                return "18";
+            case 7:
+                return "19";
+            case 8:
+                return "20";
+            case 9:
+                return "21";
+            case 10:
+                return "22";
+            case 11:
+                return "23";
+            case 12:
+                return "12";
+        }
+
+        return null;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //converts from 24h to 12h format
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public String convertToAm(int hours)
+    {
+        switch (hours)
+        {
+            case 1:
+                return "1";
+            case 2:
+                return "2";
+            case 3:
+                return "3";
+            case 4:
+                return "4";
+            case 5:
+                return "5";
+            case 6:
+                return "6";
+            case 7:
+                return "7";
+            case 8:
+                return "8";
+            case 9:
+                return "9";
+            case 10:
+                return "10";
+            case 11:
+                return "11";
+            case 12:
+                return "0";
+        }
+
+        return null;
     }
 }

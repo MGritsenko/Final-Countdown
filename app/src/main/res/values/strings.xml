@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Final Countdown</string>
-    <string name="set_time">Set time:</string>
-    <string name="set_date">Set date:</string>
+    <string name="set_time">Time:</string>
+    <string name="set_date">Date:</string>
     <string name="previous_dates">Previous dates:</string>
     <string name="set_new_countdown">SET NEW COUNTDOWN</string>
     <string name="send_email">Em@il me</string>
@@ -12,17 +12,24 @@
     <string name="s">s</string>
     <string name="d">d</string>
     <string name="y">y</string>
-    <string name="formating">d:%1$d/h:%2$d/m:%3$d/s:%4$d</string>
-    <string name="error">Please fill out this field!</string>
-    <string name="dd_mm_yy">dd/MMMM/yyyy hh:mm:ss</string>
+    <string name="formatting">Y %1$d. M %2$d. D %3$d / h %4$d: m %5$d: s %6$d</string>
+    <string name="error">Please fill in the blank field</string>
+    <string name="dd_mm_yy">dd.MMM.yyyy / h:mm:ss a</string>
     <string name="subject">Time remaining</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
 
-    <string name="error_h">Can not be bigger than 23!</string>
-    <string name="error_m">Can not be bigger than 59!</string>
-    <string name="error_s">Can not be bigger than 59!</string>
-    <string name="error_d">Can not be bigger than 31!</string>
-    <string name="error_mnth_max">Can not be bigger than 12!</string>
-    <string name="error_mnth_min">Can not be less than 1!</string>
-    <string name="error_ymax">Can not be bigger than 3030!</string>
-    <string name="error_ymin">Can not be less than 1970!</string>
+    <string name="incorrect_date">Incorrect date</string>
+    <string name="inserted">Date inserted</string>
+    <string name="not_inserted">Date not inserted</string>
+    <string name="error_h_max">Hours can`t be bigger than 12</string>
+    <string name="error_h_min">Hours can`t be less than 1</string>
+    <string name="error_m">Minutes can`t be bigger than 59</string>
+    <string name="error_s">Seconds can`t be bigger than 59</string>
+    <string name="error_d_max">Day can`t be bigger than 31</string>
+    <string name="error_d_min">Day can`t be less than 1</string>
+    <string name="error_mnth_max">Month can`t be bigger than 12</string>
+    <string name="error_mnth_min">Month can`t be less than 1</string>
+    <string name="error_ymax">Can`t be bigger than 6000</string>
+    <string name="error_ymin">Can`t be less than 1</string>
 </resources>

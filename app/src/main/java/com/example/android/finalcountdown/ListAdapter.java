@@ -1,0 +1,98 @@
+package com.example.android.finalcountdown;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import java.util.List;
+
+public class ListAdapter extends BaseAdapter
+{
+    Context ctx;
+    LayoutInflater lInflater;
+    List<String> objects;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Constructor
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public ListAdapter(){}
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Initialization of a new ListAdapter object
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public void setListAdapter(Context context, List<String> strings)
+    {
+        ctx = context;
+        objects = strings;
+        lInflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Returns quantity of objects List<String> objects;
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public int getCount()
+    {
+        return objects.size();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Returns an objects by its index
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public Object getItem(int position)
+    {
+        return objects.get(position);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Returns an objects index
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public long getItemId(int position)
+    {
+        return position;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Returns a complete view that will be displayed as a next item
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        View view = convertView;
+
+        if (view == null)
+            view = lInflater.inflate(R.layout.item, parent, false);
+
+        String str = getString(position);
+
+        ((TextView) view.findViewById(R.id.date)).setText(str);
+
+        return view;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Returns a String by its index
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    String getString(int position)
+    {
+        return ((String) getItem(position));
+    }
+
+//    List<String> getListOfStrings()
+//    {
+//        List<String> list = new ArrayList<>();
+//
+//        for (String str : objects)
+//        {
+//            if (!str.isEmpty())
+//                list.add(str);
+//        }
+//
+//        return list;
+//    }
+}

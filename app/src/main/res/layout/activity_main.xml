@@ -17,22 +17,22 @@
             android:id="@+id/timeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp">
+            android:paddingBottom="4dp">
 
             <TextView
                 android:id="@+id/setTimeTextView"
                 android:paddingStart="16dp"
                 android:paddingLeft="16dp"
-                android:paddingEnd="4dp"
-                android:paddingRight="4dp"
-                android:layout_width="wrap_content"
+                android:paddingEnd="0dp"
+                android:paddingRight="0dp"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:text="@string/set_time"/>
 
             <TextView
-                android:paddingStart="4dp"
-                android:paddingLeft="4dp"
+                android:paddingStart="0dp"
+                android:paddingLeft="0dp"
                 android:paddingEnd="4dp"
                 android:paddingRight="4dp"
                 android:layout_width="wrap_content"
@@ -83,220 +83,241 @@
                 android:inputType="number"/>
 
             <CheckBox
-                android:id="@+id/timeBox"
-                android:paddingStart="8dp"
-                android:paddingLeft="8dp"
-                android:paddingEnd="0dp"
-                android:paddingRight="0dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:saveEnabled="true"
-                android:onClick="SetTimeEnabled"/>
+                  android:id="@+id/timeBox"
+                  android:paddingStart="8dp"
+                  android:paddingLeft="8dp"
+                  android:paddingEnd="0dp"
+                  android:paddingRight="0dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:saveEnabled="true"
+                  android:onClick="SetTimeEnabled"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/dateLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp">
+              android:id="@+id/dateLayout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingBottom="4dp">
 
-            <TextView
-                android:id="@+id/setDateTextView"
-                android:paddingStart="16dp"
-                android:paddingLeft="16dp"
-                android:paddingEnd="4dp"
-                android:paddingRight="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="@string/set_date" />
+              <TextView
+                  android:id="@+id/setDateTextView"
+                  android:paddingStart="16dp"
+                  android:paddingLeft="16dp"
+                  android:paddingEnd="0dp"
+                  android:paddingRight="0dp"
+                  android:layout_width="64dp"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"
+                  android:text="@string/set_date" />
 
-            <TextView
-                android:paddingStart="4dp"
-                android:paddingLeft="4dp"
-                android:paddingEnd="4dp"
-                android:paddingRight="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="@string/d"/>
+              <TextView
+                  android:paddingStart="0dp"
+                  android:paddingLeft="0dp"
+                  android:paddingEnd="4dp"
+                  android:paddingRight="4dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"
+                  android:text="@string/d"/>
 
-            <EditText
-                android:id="@+id/daysEdit"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
+              <EditText
+                  android:id="@+id/daysEdit"
+                  android:layout_weight="1"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:inputType="number" />
 
-            <TextView
-                android:paddingStart="4dp"
-                android:paddingLeft="4dp"
-                android:paddingEnd="4dp"
-                android:paddingRight="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="@string/m"/>
+              <TextView
+                  android:paddingStart="4dp"
+                  android:paddingLeft="4dp"
+                  android:paddingEnd="4dp"
+                  android:paddingRight="4dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"
+                  android:text="@string/m"/>
 
-            <EditText
-                android:id="@+id/monthsEdit"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
+              <EditText
+                  android:id="@+id/monthsEdit"
+                  android:layout_weight="1"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:inputType="number" />
 
-            <TextView
-                android:paddingStart="4dp"
-                android:paddingLeft="4dp"
-                android:paddingEnd="4dp"
-                android:paddingRight="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="@string/y"/>
+              <TextView
+                  android:paddingStart="4dp"
+                  android:paddingLeft="4dp"
+                  android:paddingEnd="4dp"
+                  android:paddingRight="4dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"
+                  android:text="@string/y"/>
 
-            <EditText
-                android:id="@+id/yearsEdit"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
+              <EditText
+                  android:id="@+id/yearsEdit"
+                  android:layout_weight="1"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:inputType="number" />
 
-            <CheckBox
-                android:id="@+id/dateBox"
-                android:paddingStart="8dp"
-                android:paddingLeft="8dp"
-                android:paddingEnd="0dp"
-                android:paddingRight="0dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="SetDateEnabled"/>
+              <CheckBox
+                  android:id="@+id/dateBox"
+                  android:paddingStart="8dp"
+                  android:paddingLeft="8dp"
+                  android:paddingEnd="0dp"
+                  android:paddingRight="0dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:onClick="SetDateEnabled"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+              <Button
+                  android:id="@+id/setNewCountDownButton"
+                  android:layout_marginTop="8dp"
+                  android:layout_marginBottom="8dp"
+                  android:layout_marginLeft="16dp"
+                  android:layout_marginStart="16dp"
+                  android:layout_marginRight="16dp"
+                  android:layout_marginEnd="16dp"
+                  android:layout_weight="2"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="@string/set_new_countdown"
+                  android:onClick="SetNewCountDown"/>
+
+              <Button
+                  android:id="@+id/ampm"
+                  android:layout_marginTop="8dp"
+                  android:layout_marginBottom="8dp"
+                  android:layout_marginLeft="-12dp"
+                  android:layout_marginStart="-12dp"
+                  android:layout_marginRight="16dp"
+                  android:layout_marginEnd="16dp"
+                  android:layout_weight="1"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="@string/am"
+                  android:onClick="amPm"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+              <TextView
+                  android:id="@+id/toDate"
+                  android:layout_marginTop="8dp"
+                  android:layout_marginBottom="8dp"
+                  android:layout_marginLeft="16dp"
+                  android:layout_marginStart="16dp"
+                  android:layout_marginRight="4dp"
+                  android:layout_marginEnd="4dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"
+                  android:text="@string/to_date"/>
+
+              <TextView
+                  android:id="@+id/resultTime"
+                  android:gravity="center"
+                  android:layout_marginTop="8dp"
+                  android:layout_marginBottom="8dp"
+                  android:layout_marginLeft="4dp"
+                  android:layout_marginStart="4dp"
+                  android:layout_marginRight="16dp"
+                  android:layout_marginEnd="16dp"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              >
+
+              <TextView
+                  android:id="@+id/timeRemaining"
+                  android:layout_marginTop="8dp"
+                  android:layout_marginBottom="8dp"
+                  android:layout_marginLeft="16dp"
+                  android:layout_marginStart="16dp"
+                  android:layout_marginRight="4dp"
+                  android:layout_marginEnd="4dp"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"
+                  android:text="@string/to_go"/>
+
+              <TextView
+                  android:id="@+id/resultDate"
+                  android:gravity="center"
+                  android:layout_marginTop="8dp"
+                  android:layout_marginBottom="8dp"
+                  android:layout_marginLeft="4dp"
+                  android:layout_marginStart="4dp"
+                  android:layout_marginRight="16dp"
+                  android:layout_marginEnd="16dp"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textSize="16sp"/>
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/previousDates"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="@string/previous_dates"/>
+              android:id="@+id/previousDates"
+              android:layout_gravity="center"
+              android:layout_marginStart="16dp"
+              android:layout_marginLeft="16dp"
+              android:layout_marginEnd="8dp"
+              android:layout_marginRight="8dp"
+              android:layout_marginTop="4dp"
+              android:layout_marginBottom="4dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="16sp"
+              android:text="@string/previous_dates"/>
 
-        <TextView
-            android:id="@+id/scrollableTextView"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
+        <ListView
+              android:id="@+id/scrollableTextView"
+              android:layout_marginTop="4dp"
+              android:layout_marginBottom="4dp"
+              android:layout_marginLeft="16dp"
+              android:layout_marginStart="16dp"
+              android:layout_marginRight="16dp"
+              android:layout_marginEnd="16dp"
+              android:scrollbars = "vertical"
+              android:layout_width="match_parent"
+              android:background="#D3D3D3"
+              android:layout_height="140dp"/>
+
+        <Button
+            android:id="@+id/sendEmail"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginEnd="16dp"
-            android:scrollbars = "vertical"
+
             android:layout_width="match_parent"
-            android:background="#D3D3D3"
-            android:layout_height="70dp"/>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/setNewCountDownButton"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/set_new_countdown"
-                android:onClick="SetNewCountDown"/>
-
-            <Button
-                android:id="@+id/sendEmail"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/send_email"
-                android:onClick="SendEmail"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/toDate"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="@string/to_date"/>
-
-            <TextView
-                android:id="@+id/resultTime"
-                android:gravity="center"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/timeRemaining"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="@string/to_go"/>
-
-            <TextView
-                android:id="@+id/resultDate"
-                android:layout_margin="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="24sp"/>
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="@string/send_email"
+            android:onClick="SendEmail"/>
 
     </LinearLayout>
 
-</ScrollView>
+  </ScrollView>
